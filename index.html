@@ -1,821 +1,730 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>東京旅遊計畫 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;700&amp;family=Shippori+Mincho:wght@400;700&amp;family=DM+Serif+Display:ital@0;1&amp;family=Karla:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;700&family=Shippori+Mincho:wght@400;700&family=DM+Serif+Display:ital@0;1&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #1a1a1a;
-    --paper: #f5f0e8;
-    --red: #c0392b;
-    --gold: #b8860b;
-    --muted: #7a7060;
-    --border: #d4c9b0;
-    --white: #fefcf8;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Karla', 'Noto Serif TC', serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+:root{--ink:#1a1a1a;--paper:#f5f0e8;--red:#c0392b;--gold:#b8860b;--muted:#7a7060;--border:#d4c9b0;--white:#fefcf8;--green:#2e7d5e;--blue:#1a5276;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--paper);color:var(--ink);font-family:'Karla','Noto Serif TC',serif;min-height:100vh;overflow-x:hidden;}
+.hero{position:relative;height:100vh;min-height:600px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#0d0a07;}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.55;animation:heroZoom 20s ease-in-out infinite alternate;}
+@keyframes heroZoom{from{transform:scale(1.05);}to{transform:scale(1.12);}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,10,7,.2) 0%,rgba(13,10,7,.75) 100%);}
+.hero-content{position:relative;text-align:center;color:var(--white);animation:fadeUp 1.2s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.hero-kana{font-family:'Shippori Mincho',serif;font-size:clamp(1rem,2vw,1.3rem);letter-spacing:.4em;color:#d4b896;margin-bottom:1rem;}
+.hero-title{font-family:'DM Serif Display',serif;font-size:clamp(3rem,8vw,7rem);line-height:1;letter-spacing:-.02em;}
+.hero-title em{font-style:italic;color:#d4b896;}
+.hero-sub{font-family:'Noto Serif TC',serif;font-size:clamp(.95rem,2vw,1.3rem);letter-spacing:.2em;color:#c8bead;margin-top:1.2rem;}
+.hero-dates{margin-top:2.5rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;}
+.hero-date-pill{border:1px solid rgba(212,184,150,.5);padding:.5rem 1.5rem;font-size:.85rem;letter-spacing:.15em;color:#d4b896;font-family:'Karla',sans-serif;}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;animation:bounce 2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+.scroll-hint::after{content:'';display:block;width:1px;height:40px;background:rgba(255,255,255,.3);margin:.5rem auto 0;}
+.tabs-wrapper{position:sticky;top:0;z-index:100;background:var(--ink);box-shadow:0 2px 20px rgba(0,0,0,.3);}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;max-width:1100px;margin:0 auto;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab-btn{flex:1;min-width:100px;padding:.85rem .5rem;background:none;border:none;border-bottom:3px solid transparent;color:#887f6e;cursor:pointer;font-family:'Noto Serif TC',serif;font-size:.74rem;letter-spacing:.04em;transition:all .25s;white-space:nowrap;text-align:center;}
+.tab-btn .tab-date{display:block;font-family:'DM Serif Display',serif;font-size:1.2rem;color:#c8bead;margin-bottom:.1rem;transition:color .25s;}
+.tab-btn:hover{color:#c8bead;background:rgba(255,255,255,.04);}
+.tab-btn.active{border-bottom-color:var(--gold);color:var(--white);}
+.tab-btn.active .tab-date{color:#d4b896;}
+.day-panel{display:none;max-width:1000px;margin:0 auto;padding:3rem 2rem 5rem;animation:fadeIn .4s ease both;}
+.day-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.day-header{border-bottom:1px solid var(--border);padding-bottom:1.5rem;margin-bottom:2rem;}
+.day-label{font-family:'DM Serif Display',serif;font-size:clamp(2.5rem,6vw,4.5rem);line-height:1;}
+.day-label em{font-style:italic;color:var(--gold);}
+.day-subtitle{font-family:'Noto Serif TC',serif;font-size:.9rem;color:var(--muted);margin-top:.5rem;letter-spacing:.1em;}
+.weather-bar{display:flex;align-items:center;gap:1.5rem;padding:.9rem 1.2rem;border-radius:4px;margin-bottom:2rem;flex-wrap:wrap;}
+.weather-icon{font-size:2.2rem;line-height:1;}
+.weather-main{color:#fff;}
+.weather-temp{font-family:'DM Serif Display',serif;font-size:1.8rem;color:#fff;line-height:1;}
+.weather-desc{font-size:.8rem;color:rgba(255,255,255,.8);letter-spacing:.08em;margin-top:.2rem;font-family:'Karla',sans-serif;}
+.weather-details{display:flex;gap:1.2rem;margin-left:auto;flex-wrap:wrap;}
+.weather-detail{text-align:center;color:rgba(255,255,255,.85);}
+.weather-detail span{display:block;font-size:.68rem;color:rgba(255,255,255,.6);letter-spacing:.06em;font-family:'Karla',sans-serif;margin-bottom:.1rem;}
+.weather-detail strong{font-size:.9rem;font-family:'Karla',sans-serif;}
+.timeline{position:relative;padding-left:2.5rem;}
+.timeline::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:1px;background:var(--border);}
+.event{position:relative;margin-bottom:2.5rem;}
+.event::before{content:'';position:absolute;left:-2.05rem;top:.55rem;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--paper);box-shadow:0 0 0 1px var(--gold);}
+.event.transit::before{background:var(--muted);box-shadow:0 0 0 1px var(--muted);}
+.event.highlight::before{background:var(--red);box-shadow:0 0 0 1px var(--red);width:14px;height:14px;left:-2.25rem;top:.4rem;}
+.event-time{font-family:'Karla',sans-serif;font-size:.78rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.3rem;}
+.event-title{font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.4rem;}
+.event.transit .event-title{color:var(--muted);font-weight:400;}
+.event-card{border:1px solid var(--border);background:var(--white);overflow:hidden;display:grid;grid-template-columns:1fr 1.6fr;transition:box-shadow .2s,transform .2s;}
+.event-card:hover{box-shadow:0 8px 40px rgba(0,0,0,.12);transform:translateY(-2px);}
+.event-card-img-wrap{overflow:hidden;background:#c8bead;width:320px;min-width:320px;max-width:320px;}
+.event-card-img{width:100%;height:210px;object-fit:cover;object-position:center center;display:block;transition:transform .4s;}
+.event-card:hover .event-card-img{transform:scale(1.04);}
+.event-card-body{padding:1.4rem 1.6rem;display:flex;flex-direction:column;justify-content:center;}
+.event-card-time{font-family:'Karla',sans-serif;font-size:.75rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;}
+.event-card-title{font-family:'Noto Serif TC',serif;font-size:1.18rem;font-weight:700;margin-bottom:.5rem;line-height:1.4;}
+.event-card-desc{font-size:.87rem;color:var(--muted);line-height:1.75;font-family:'Noto Serif TC',serif;}
+.tag-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem;align-items:center;}
+.event-tag{display:inline-block;padding:.22rem .65rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);color:var(--muted);font-family:'Karla',sans-serif;}
+.event-tag.food{border-color:#c0392b44;color:var(--red);}
+.event-tag.sight{border-color:#b8860b44;color:var(--gold);}
+.event-tag.hotel{border-color:#2980b944;color:#2980b9;}
+.event-tag.tr{border-color:#95959544;color:#777;}
+.map-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-family:'Karla',sans-serif;color:var(--green);text-decoration:none;letter-spacing:.06em;border-bottom:1px solid transparent;transition:border-color .2s;}
+.map-link:hover{border-bottom-color:var(--green);}
+.transport-row{display:flex;align-items:flex-start;gap:1rem;padding:.9rem 1.1rem;background:rgba(0,0,0,.03);border-left:3px solid var(--border);margin-bottom:.5rem;}
+.transport-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem;}
+.transport-body{font-size:.87rem;color:var(--muted);font-family:'Noto Serif TC',serif;line-height:1.7;}
+.transport-body strong{color:var(--ink);}
+.transport-tip{font-size:.78rem;color:var(--blue);margin-top:.3rem;font-family:'Karla',sans-serif;letter-spacing:.04em;}
+.transport-tip::before{content:'💡 ';}
+.meal-toggle{margin-top:.7rem;cursor:pointer;font-size:.8rem;color:var(--gold);font-family:'Karla',sans-serif;letter-spacing:.05em;user-select:none;display:inline-block;}
+.meal-panel{display:none;margin-top:.5rem;border:1px solid var(--border);}
+.meal-panel.open{display:block;}
+.meal-table{width:100%;border-collapse:collapse;}
+.meal-table th{background:#f0ebe0;font-family:'Noto Serif TC',serif;font-size:.76rem;font-weight:700;padding:.65rem 1rem;text-align:left;color:var(--muted);letter-spacing:.08em;border-bottom:1px solid var(--border);}
+.meal-table td{padding:.7rem 1rem;font-size:.83rem;border-bottom:1px solid var(--border);font-family:'Noto Serif TC',serif;vertical-align:top;line-height:1.6;}
+.meal-table tr:last-child td{border-bottom:none;}
+.meal-table tr:hover td{background:#faf7f0;}
+.ft{display:inline-block;padding:.12rem .45rem;font-size:.66rem;border-radius:2px;font-family:'Karla',sans-serif;letter-spacing:.04em;font-weight:500;}
+.ft-ramen{background:#fde8e8;color:#c0392b;}
+.ft-sushi{background:#e8f0fe;color:#1a5276;}
+.ft-set{background:#e8f8ef;color:#2e7d5e;}
+.ft-soba{background:#fef9e7;color:#7d6608;}
+.ft-seafood{background:#eaf4fb;color:#1a6b8a;}
+.ft-yakitori{background:#fef5e7;color:#9a5c0a;}
+.ft-izakaya{background:#f5eef8;color:#6c3483;}
+.ft-bbq{background:#fdedec;color:#943126;}
+.ft-teppan{background:#fdf3e3;color:#935116;}
+.section-divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:var(--border);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-family:'Karla',sans-serif;}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+footer{background:var(--ink);color:rgba(255,255,255,.3);text-align:center;padding:2.5rem;font-size:.8rem;letter-spacing:.15em;font-family:'Karla',sans-serif;}
+footer strong{color:rgba(255,255,255,.6);}
+@media(max-width:640px){.event-card{grid-template-columns:1fr;}.event-card-img-wrap{width:100%;min-width:100%;max-width:100%;}
+  
+  .event-card-img{height:175px;}
+  .day-panel{padding:2rem 1.1rem 4rem;}
+  .timeline{padding-left:2rem;}
+  .weather-details{margin-left:0;}
+}
 
-  /* HERO */
-  .hero {
-    position: relative;
-    height: 100vh;
-    min-height: 600px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: #0d0a07;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    background-size: cover;
-    background-position: center;
-    opacity: 0.5;
-    animation: heroZoom 20s ease-in-out infinite alternate;
-  }
-  @keyframes heroZoom {
-    from { transform: scale(1.05); }
-    to   { transform: scale(1.12); }
-  }
-  .hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(13,10,7,0.3) 0%, rgba(13,10,7,0.7) 100%);
-  }
-  .hero-content {
-    position: relative;
-    text-align: center;
-    color: var(--white);
-    animation: fadeUp 1.2s ease both;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .hero-kana {
-    font-family: 'Shippori Mincho', serif;
-    font-size: clamp(1rem, 2vw, 1.3rem);
-    letter-spacing: 0.4em;
-    color: #d4b896;
-    margin-bottom: 1rem;
-  }
-  .hero-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(3rem, 8vw, 7rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-  .hero-title em { font-style: italic; color: #d4b896; }
-  .hero-sub {
-    font-family: 'Noto Serif TC', serif;
-    font-size: clamp(1rem, 2vw, 1.4rem);
-    letter-spacing: 0.2em;
-    color: #c8bead;
-    margin-top: 1.2rem;
-  }
-  .hero-dates {
-    margin-top: 2.5rem;
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .hero-date-pill {
-    border: 1px solid rgba(212,184,150,0.5);
-    padding: 0.5rem 1.5rem;
-    font-size: 0.85rem;
-    letter-spacing: 0.15em;
-    color: #d4b896;
-    font-family: 'Karla', sans-serif;
-  }
-  .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgba(255,255,255,0.5);
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    animation: bounce 2s ease-in-out infinite;
-  }
-  @keyframes bounce {
-    0%,100% { transform: translateX(-50%) translateY(0); }
-    50%      { transform: translateX(-50%) translateY(8px); }
-  }
-  .scroll-hint::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 40px;
-    background: rgba(255,255,255,0.3);
-    margin: 0.5rem auto 0;
-  }
-
-  /* TABS */
-  .tabs-wrapper {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--ink);
-    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-  }
-  .tabs {
-    display: flex;
-    overflow-x: auto;
-    scrollbar-width: none;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    flex: 1;
-    min-width: 110px;
-    padding: 1rem 0.8rem;
-    background: none;
-    border: none;
-    border-bottom: 3px solid transparent;
-    color: #887f6e;
-    cursor: pointer;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
-    transition: all 0.25s;
-    white-space: nowrap;
-    text-align: center;
-  }
-  .tab-btn .tab-date {
-    display: block;
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.3rem;
-    color: #c8bead;
-    margin-bottom: 0.15rem;
-    transition: color 0.25s;
-  }
-  .tab-btn:hover { color: #c8bead; background: rgba(255,255,255,0.04); }
-  .tab-btn.active { border-bottom-color: var(--gold); color: var(--white); }
-  .tab-btn.active .tab-date { color: #d4b896; }
-
-  /* CONTENT */
-  .day-panel {
-    display: none;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 3rem 2rem 5rem;
-    animation: fadeIn 0.4s ease both;
-  }
-  .day-panel.active { display: block; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .day-header {
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 1.5rem;
-    margin-bottom: 3rem;
-  }
-  .day-label {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1;
-  }
-  .day-label em { font-style: italic; color: var(--gold); }
-  .day-subtitle {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin-top: 0.5rem;
-    letter-spacing: 0.1em;
-  }
-
-  /* TIMELINE */
-  .timeline { position: relative; padding-left: 2.5rem; }
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0.6rem; top: 0.5rem; bottom: 0.5rem;
-    width: 1px;
-    background: var(--border);
-  }
-  .event { position: relative; margin-bottom: 2.5rem; }
-  .event::before {
-    content: '';
-    position: absolute;
-    left: -2.05rem; top: 0.55rem;
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--gold);
-    border: 2px solid var(--paper);
-    box-shadow: 0 0 0 1px var(--gold);
-  }
-  .event.transit::before { background: var(--muted); box-shadow: 0 0 0 1px var(--muted); }
-  .event.highlight::before {
-    background: var(--red);
-    box-shadow: 0 0 0 1px var(--red);
-    width: 14px; height: 14px;
-    left: -2.25rem; top: 0.4rem;
-  }
-  .event-time {
-    font-family: 'Karla', sans-serif;
-    font-size: 0.78rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.3rem;
-  }
-  .event-title {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 0.5rem;
-  }
-  .event.transit .event-title { color: var(--muted); font-weight: 400; }
-
-  /* CARD */
-  .event-card {
-    border: 1px solid var(--border);
-    background: var(--white);
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .event-card:hover {
-    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-    transform: translateY(-2px);
-  }
-  .event-card-img-wrap { overflow: hidden; }
-  .event-card-img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-    background: #e8e0d0;
-  }
-  .event-card:hover .event-card-img { transform: scale(1.04); }
-  .event-card-body {
-    padding: 1.5rem 1.8rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .event-card-time {
-    font-family: 'Karla', sans-serif;
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-  .event-card-title {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.7rem;
-    line-height: 1.4;
-  }
-  .event-card-desc {
-    font-size: 0.88rem;
-    color: var(--muted);
-    line-height: 1.7;
-    font-family: 'Noto Serif TC', serif;
-  }
-  .event-tag {
-    display: inline-block;
-    margin-top: 0.8rem;
-    padding: 0.25rem 0.7rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Karla', sans-serif;
-  }
-  .event-tag.food  { border-color: #c0392b44; color: var(--red); }
-  .event-tag.sight { border-color: #b8860b44; color: var(--gold); }
-  .event-tag.hotel { border-color: #2980b944; color: #2980b9; }
-  .event-tag.tr    { border-color: #95959544; color: #777; }
-
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 1.5rem 0;
-    color: var(--border);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-family: 'Karla', sans-serif;
-  }
-  .section-divider::before,.section-divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
-  }
-
-  .transport-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.8rem 1rem;
-    background: rgba(0,0,0,0.03);
-    border-left: 3px solid var(--border);
-    margin-bottom: 0.5rem;
-  }
-  .transport-icon { font-size: 1.2rem; }
-  .transport-text { font-size: 0.9rem; color: var(--muted); font-family: 'Noto Serif TC', serif; }
-  .transport-text strong { color: var(--ink); }
-
-  footer {
-    background: var(--ink);
-    color: rgba(255,255,255,0.3);
-    text-align: center;
-    padding: 2.5rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.15em;
-    font-family: 'Karla', sans-serif;
-  }
-  footer strong { color: rgba(255,255,255,0.6); }
-
-  @media (max-width: 640px) {
-    .event-card { grid-template-columns: 1fr; }
-    .event-card-img { height: 180px; }
-    .day-panel { padding: 2rem 1.2rem 4rem; }
-    .timeline { padding-left: 2rem; }
-  }
+  .hotel-banner{display:flex;align-items:center;gap:1rem;padding:.9rem 1.2rem;background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);margin-bottom:2rem;}
+  .hotel-banner-body{flex:1;}
+  .hotel-banner-label{font-size:.68rem;font-family:'Karla',sans-serif;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem;}
+  .hotel-banner-name{font-family:'Noto Serif TC',serif;font-size:1rem;font-weight:700;color:var(--ink);}
+  .hotel-banner-sub{font-size:.78rem;color:var(--muted);font-family:'Karla',sans-serif;margin-top:.1rem;}
 </style>
 </head>
 <body>
-<!-- HERO -->
+
 <div class="hero">
-<div class="hero-bg" style="background-image:url('https://loremflickr.com/1600/900/tokyo,skyline,night?lock=100')"></div>
-<div class="hero-overlay"></div>
-<div class="hero-content">
-<div class="hero-kana">とうきょう ・ 2026</div>
-<h1 class="hero-title"><em>Tokyo</em><br/>旅遊計畫</h1>
-<p class="hero-sub">東京・輕井澤・鎌倉・江之島</p>
-<div class="hero-dates">
-<span class="hero-date-pill">3/30 啟程</span>
-<span class="hero-date-pill">6 天 5 夜</span>
-<span class="hero-date-pill">4/4 返程</span>
+  <div class="hero-bg" style="background-image:url('images/hero_tokyo.jpg')"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-kana">とうきょう ・ 2026</div>
+    <h1 class="hero-title"><em>Tokyo</em><br>旅遊計畫</h1>
+    <p class="hero-sub">東京・輕井澤・鎌倉・江之島</p>
+    <div class="hero-dates">
+      <span class="hero-date-pill">3/30 啟程</span>
+      <span class="hero-date-pill">6 天 5 夜</span>
+      <span class="hero-date-pill">4/4 返程</span>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll</div>
 </div>
-</div>
-<div class="scroll-hint">scroll</div>
-</div>
-<!-- TABS -->
+
 <div class="tabs-wrapper">
-<div class="tabs">
-<button class="tab-btn active" onclick="showDay('day1',this)"><span class="tab-date">3/30</span>抵達東京</button>
-<button class="tab-btn" onclick="showDay('day2',this)"><span class="tab-date">3/31</span>輕井澤</button>
-<button class="tab-btn" onclick="showDay('day3',this)"><span class="tab-date">4/1</span>輕井澤漫遊</button>
-<button class="tab-btn" onclick="showDay('day4',this)"><span class="tab-date">4/2</span>中目黑賞櫻</button>
-<button class="tab-btn" onclick="showDay('day5',this)"><span class="tab-date">4/3</span>鎌倉・江之島</button>
-<button class="tab-btn" onclick="showDay('day6',this)"><span class="tab-date">4/4</span>返程</button>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showDay('day1',this)"><span class="tab-date">3/30</span>抵達東京</button>
+    <button class="tab-btn" onclick="showDay('day2',this)"><span class="tab-date">3/31</span>輕井澤</button>
+    <button class="tab-btn" onclick="showDay('day3',this)"><span class="tab-date">4/1</span>輕井澤漫遊</button>
+    <button class="tab-btn" onclick="showDay('day4',this)"><span class="tab-date">4/2</span>中目黑賞櫻</button>
+    <button class="tab-btn" onclick="showDay('day5',this)"><span class="tab-date">4/3</span>鎌倉・江之島</button>
+    <button class="tab-btn" onclick="showDay('day6',this)"><span class="tab-date">4/4</span>淺草・返程</button>
+  </div>
 </div>
-</div>
-<!-- ══ DAY 1 ══ -->
+
+<!-- ═══ DAY 1 ═══ -->
 <div class="day-panel active" id="day1">
-<div class="day-header">
-<div class="day-label">Day <em>01</em></div>
-<div class="day-subtitle">3月30日 ｜ 桃園 → 東京 ｜ 抵達日本，感受東京的第一夜</div>
+  <div class="day-header">
+    <div class="day-label">Day <em>01</em></div>
+    <div class="day-subtitle">3月30日（一） ｜ 桃園 → 東京 ｜ 抵達日本，感受東京的第一夜</div>
+  </div>
+  <div class="weather-bar" style="background:linear-gradient(135deg,#1a3a5c,#2d6a9f);">
+    <div class="weather-icon">🌤</div>
+    <div class="weather-main">
+      <div class="weather-temp">16°C</div>
+      <div class="weather-desc">東京・晴時多雲　3月30日</div>
+    </div>
+    <div class="weather-details">
+      <div class="weather-detail"><span>最高</span><strong>18°C</strong></div>
+      <div class="weather-detail"><span>最低</span><strong>9°C</strong></div>
+      <div class="weather-detail"><span>降雨</span><strong>5%</strong></div>
+      <div class="weather-detail"><span>風速</span><strong>3 m/s</strong></div>
+      <div class="weather-detail"><span>濕度</span><strong>52%</strong></div>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="event transit">
+      <div class="event-time">03:40 – 04:40</div>
+      <div class="event-title">前往桃園機場（已預約機場接送）</div>
+      <div class="transport-row"><span class="transport-icon">🚗</span><div class="transport-body"><strong>已預約機場接送</strong>　家門口 → 桃園國際機場 T1<div class="transport-tip">確認接送時間、司機聯絡方式；備好護照、電子機票</div></div></div>
+    </div>
+    <div class="event transit">
+      <div class="event-time">04:40 – 06:35</div>
+      <div class="event-title">桃園機場 T1・辦理登機</div>
+    </div>
+    <div class="event transit">
+      <div class="event-time">06:35 – 11:00</div>
+      <div class="transport-row"><span class="transport-icon">✈️</span><div class="transport-body"><strong>飛行中</strong>　桃園 T1 → 成田 T2　｜ 約 4h25m<div class="transport-tip">可在機上補眠；入境表格住址填 APA Hotel 上野站北</div></div></div>
+    </div>
+    <div class="event">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/narita_airport.jpg" alt="成田機場" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">11:00 — 12:30</div>
+          <div class="event-card-title">成田機場出關 ／ 取東京廣域周遊券</div>
+          <div class="event-card-desc">通關後至 T2 的 JR 東日本旅行服務中心（2F）憑預約憑證領取<strong>東京廣域周遊券</strong>（Tokyo Wide Pass）。</div>
+          <div class="tag-row"><span class="event-tag tr">交通</span><a class="map-link" href="https://maps.google.com/?q=成田空港第2ターミナル+JR東日本" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>JR 服務中心</a></div>
+          <div class="transport-row" style="margin-top:.8rem;"><span class="transport-icon">🚅</span><div class="transport-body"><strong>N'EX</strong>　成田 T2 → 上野駅　約 65 分（廣域周遊券可直接使用）<div class="transport-tip">直達上野，出站步行 1 分即達 APA Hotel</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/ueno_food.jpg" alt="上野午餐" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">12:30 — 14:00</div>
+          <div class="event-card-title">午餐 ｜ 上野・御徒町</div>
+          <div class="event-card-desc">直接在上野下車，行李寄放飯店後即可覓食。御徒町一帶選擇多元，從高級壽司到平價食堂應有盡有。</div>
+          <div class="tag-row"><span class="event-tag food">午餐</span><a class="map-link" href="https://maps.google.com/?q=御徒町+グルメ" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>御徒町美食</a></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍜 推薦午餐名單 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>寿司大（アメ横）</td><td><span class="ft ft-sushi">握壽司</span></td><td>阿美橫丁旁，新鮮時令</td></tr>
+            <tr><td>牛かつ もと村</td><td><span class="ft ft-set">炸牛排</span></td><td>罕見炸牛排定食，外酥內嫩</td></tr>
+            <tr><td>上野精養軒</td><td><span class="ft ft-set">西式洋食</span></td><td>明治時代老舖，公園內景觀</td></tr>
+            <tr><td>鳥勝（御徒町）</td><td><span class="ft ft-yakitori">雞肉串燒</span></td><td>超值午間烤雞套餐</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/hotel_apa.jpg" alt="APA Hotel" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">14:00 — 15:00</div>
+          <div class="event-card-title">Check-in ｜ APA Hotel 上野站北</div>
+          <div class="event-card-desc">辦理入住，稍作休息後出發探索上野。距上野站步行 1 分鐘，地理位置絕佳。</div>
+          <div class="tag-row"><span class="event-tag hotel">飯店</span><a class="map-link" href="https://maps.google.com/?q=アパホテル上野駅北" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>APA Hotel 上野站北</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-divider">傍晚</div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/ueno_park.jpg" alt="上野公園" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">15:00 — 18:00</div>
+          <div class="event-card-title">上野公園・阿美橫丁</div>
+          <div class="event-card-desc">春季賞櫻勝地！超過 1,000 棵染井吉野盛開如粉色夢境。逛完公園可順道逛阿美橫丁，感受昭和庶民風情。</div>
+          <div class="tag-row"><span class="event-tag sight">景點</span><a class="map-link" href="https://maps.google.com/?q=上野公園+東京" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>上野公園</a><a class="map-link" href="https://maps.google.com/?q=アメ横" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>阿美橫丁</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/tokyo_tower.jpg" alt="東京鐵塔" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">18:00 — 21:00</div>
+          <div class="event-card-title">晚餐 ＋ 東京鐵塔</div>
+          <div class="event-card-desc">前往芝公園欣賞夜晚燈火通明的東京鐵塔，周邊商場也可一逛，完美結束第一天。</div>
+          <div class="tag-row"><span class="event-tag sight">夜景</span><span class="event-tag food">晚餐</span><a class="map-link" href="https://maps.google.com/?q=東京タワー" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>東京鐵塔</a></div>
+          <div class="transport-row" style="margin-top:.8rem;"><span class="transport-icon">🚇</span><div class="transport-body"><strong>地鐵</strong>：上野 → 大江戶線「赤羽橋」站步行 5 分（約 30 分）<div class="transport-tip">廣域周遊券不含東京地鐵，請用 Suica；推薦 19:00 點燈後抵達</div></div></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍽 推薦晚餐名單 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>ロウリーズ・ザ・プライムリブ</td><td><span class="ft ft-teppan">牛肋排</span></td><td>芝公園，東京鐵塔景觀餐廳</td></tr>
+            <tr><td>麻布十番 更科堀井</td><td><span class="ft ft-soba">蕎麥麵</span></td><td>三百年老舖，高雅氛圍</td></tr>
+            <tr><td>御徒町 吉池食堂</td><td><span class="ft ft-seafood">海鮮</span></td><td>上野附近，超新鮮海鮮定食</td></tr>
+            <tr><td>上野 韓国苑</td><td><span class="ft ft-bbq">韓式燒肉</span></td><td>大口吃肉好選擇</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="timeline">
-<div class="event transit">
-<div class="event-time">03:50 – 06:35</div>
-<div class="event-title">前往機場・等待登機</div>
-</div>
-<div class="event transit">
-<div class="event-time">06:35 – 11:00</div>
-<div class="transport-row">
-<span class="transport-icon">✈️</span>
-<span class="transport-text"><strong>飛行中</strong>　桃園機場 T1 → 成田機場 T2　｜ 約 4h25m</span>
-</div>
-</div>
-<div class="event">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="成田機場" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/narita,airport,japan?lock=101"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">11:00 — 12:30</div>
-<div class="event-card-title">成田機場出關 ／ 前往東京車站</div>
-<div class="event-card-desc">入境日本，通關後搭乘 N'EX 成田特快前往東京車站，踏上旅程的第一步！</div>
-<span class="event-tag tr">交通</span>
-</div>
-</div>
-</div>
-<div class="event">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="東京車站" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/tokyo,station,japan?lock=102"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">12:30 — 14:00</div>
-<div class="event-card-title">午餐</div>
-<div class="event-card-desc">抵達東京後的第一頓！東京車站地下街匯聚各式名店，推薦拉麵、海鮮丼或和牛定食，犒賞剛下飛機的自己。</div>
-<span class="event-tag food">午餐</span>
-</div>
-</div>
-</div>
-<div class="event">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="APA Hotel" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/tokyo,hotel,japan?lock=103"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">14:00 — 15:00</div>
-<div class="event-card-title">Check-in ｜ APA HOTEL</div>
-<div class="event-card-desc">辦理入住手續，放下行李稍作休息，整裝出發探索東京。</div>
-<span class="event-tag hotel">飯店</span>
-</div>
-</div>
-</div>
-<div class="section-divider">傍晚</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="上野公園" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/ueno,park,sakura,tokyo?lock=104"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">15:00 — 18:00</div>
-<div class="event-card-title">上野公園</div>
-<div class="event-card-desc">春季賞櫻勝地！超過 1,000 棵染井吉野讓整個公園化為粉色夢境。園內還有動物園、博物館等豐富景點。</div>
-<span class="event-tag sight">景點</span>
-</div>
-</div>
-</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="東京鐵塔" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/tokyo,tower,night,japan?lock=105"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">18:00 — 21:00</div>
-<div class="event-card-title">晚餐 ＋ 東京鐵塔及周邊商場</div>
-<div class="event-card-desc">在六本木或芝公園附近享用晚餐，欣賞夜晚燈火通明的東京鐵塔，周邊商場也可一逛，完美結束第一天。</div>
-<span class="event-tag sight">夜景</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- ══ DAY 2 ══ -->
+
+<!-- ═══ DAY 2 ═══ -->
 <div class="day-panel" id="day2">
-<div class="day-header">
-<div class="day-label">Day <em>02</em></div>
-<div class="day-subtitle">3月31日 ｜ 輕井澤 ｜ 高原小鎮的悠閒時光</div>
+  <div class="day-header">
+    <div class="day-label">Day <em>02</em></div>
+    <div class="day-subtitle">3月31日（二） ｜ 輕井澤 ｜ 高原小鎮的悠閒時光</div>
+  </div>
+  <div class="weather-bar" style="background:linear-gradient(135deg,#1a4a2e,#2d8a5a);">
+    <div class="weather-icon">⛅</div>
+    <div class="weather-main"><div class="weather-temp">10°C</div><div class="weather-desc">輕井澤・多雲　3月31日</div></div>
+    <div class="weather-details">
+      <div class="weather-detail"><span>最高</span><strong>12°C</strong></div>
+      <div class="weather-detail"><span>最低</span><strong>2°C</strong></div>
+      <div class="weather-detail"><span>降雨</span><strong>20%</strong></div>
+      <div class="weather-detail"><span>風速</span><strong>5 m/s</strong></div>
+      <div class="weather-detail"><span>濕度</span><strong>68%</strong></div>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="event transit">
+      <div class="event-time">08:30 – 09:10</div>
+      <div class="transport-row"><span class="transport-icon">🚶</span><div class="transport-body"><strong>步行前往上野駅</strong>　APA Hotel → 上野駅（1 分鐘）<div class="transport-tip">建議 08:45 前抵達月台；新幹線乘車處在地下 B1F「新幹線のりば」</div></div></div>
+    </div>
+    <div class="event transit">
+      <div class="event-time">09:10 – 10:10</div>
+      <div class="transport-row"><span class="transport-icon">🚅</span><div class="transport-body"><strong>北陸新幹線 Asama 605 號</strong>　UENO（09:10）→ KARUIZAWA（10:10）｜ 60 分<br><strong>東京廣域周遊券直接使用，無需另購票</strong><div class="transport-tip">對號座位；車右側可看富士山；抵前想好租腳踏車計畫</div></div></div>
+    </div>
+    <div class="event">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/hotel_karuizawa.jpg" alt="輕井澤王子大飯店" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">10:10 — 11:00</div>
+          <div class="event-card-title">抵達輕井澤 ／ 飯店寄放行李</div>
+          <div class="event-card-desc">從輕井澤站南口步行約 5 分鐘抵王子大飯店西館，先寄放行李（Check-in 約 15:00），輕裝出發。</div>
+          <div class="tag-row"><span class="event-tag hotel">飯店</span><a class="map-link" href="https://maps.google.com/?q=軽井沢プリンスホテル" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>王子大飯店西館</a></div>
+          <div class="transport-row" style="margin-top:.8rem;"><span class="transport-icon">🚲</span><div class="transport-body"><strong>建議在站前租腳踏車</strong>（¥500–800/hr）<div class="transport-tip">輕井澤觀光最自由的方式；天冷請帶外套</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/soba.jpg" alt="村民食堂" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">11:00 — 12:00</div>
+          <div class="event-card-title">村民食堂</div>
+          <div class="event-card-desc">使用輕井澤當地低農藥食材製作的家庭料理，是感受高原生活的絕佳選擇。</div>
+          <div class="tag-row"><span class="event-tag food">午餐</span><a class="map-link" href="https://maps.google.com/?q=村民食堂+軽井沢" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>村民食堂</a></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍜 輕井澤午餐備選 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>村民食堂</td><td><span class="ft ft-set">農家定食</span></td><td>高原野菜套餐，在地風味</td></tr>
+            <tr><td>川上庵</td><td><span class="ft ft-soba">蕎麥麵</span></td><td>舊輕銀座旁，石臼現磨</td></tr>
+            <tr><td>Saku Pizza</td><td><span class="ft ft-set">窯烤披薩</span></td><td>榆樹街小鎮內</td></tr>
+            <tr><td>Boulangerie Asanoya</td><td><span class="ft ft-set">麵包咖啡</span></td><td>百年老舖</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-divider">下午</div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/stone_church.jpg" alt="石之教會" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">16:00 — 17:00</div>
+          <div class="event-card-title">榆樹街小鎮 ／ 高原教會 ／ 石之教會</div>
+          <div class="event-card-desc">榆樹街小鎮是白樺林間的森林系複合商場；石之教會融入天然石材與植被，是融合建築與信仰的地標。</div>
+          <div class="tag-row"><span class="event-tag sight">景點</span><a class="map-link" href="https://maps.google.com/?q=ハルニレテラス+軽井沢" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>榆樹街小鎮</a><a class="map-link" href="https://maps.google.com/?q=石の教会内村鑑三記念堂" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>石之教會</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/karuizawa_outlet.jpg" alt="王子 Outlet" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">17:00 — 19:00</div>
+          <div class="event-card-title">王子大飯店 Outlet ／ Check-in</div>
+          <div class="event-card-desc">超過 240 家品牌，購物後返回飯店辦理入住，享受王子飯店的溫泉設施放鬆一整天的疲憊。</div>
+          <div class="tag-row"><span class="event-tag sight">購物</span><span class="event-tag hotel">入住</span><a class="map-link" href="https://maps.google.com/?q=軽井沢・プリンスショッピングプラザ" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>王子購物廣場</a></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍽 輕井澤晚餐推薦 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>王子飯店 The Buffet</td><td><span class="ft ft-set">自助餐</span></td><td>飯店內，信州食材自助晚餐</td></tr>
+            <tr><td>軽井沢倶楽部 離山房</td><td><span class="ft ft-set">法式懷石</span></td><td>信州食材創意料理，需預約</td></tr>
+            <tr><td>ピッツェリア サリー</td><td><span class="ft ft-set">義式料理</span></td><td>舊輕銀座附近，窯烤披薩</td></tr>
+            <tr><td>中国料理 桃李</td><td><span class="ft ft-set">中式料理</span></td><td>王子飯店內，精緻中菜</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="timeline">
-<div class="event transit">
-<div class="event-time">08:00 – 10:10</div>
-<div class="transport-row">
-<span class="transport-icon">🚅</span>
-<span class="transport-text"><strong>北陸新幹線</strong>　東京 → 輕井澤　｜ 約 1h10m</span>
-</div>
-</div>
-<div class="event">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="輕井澤" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/karuizawa,nature,japan?lock=106"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">10:00 — 11:00</div>
-<div class="event-card-title">抵達輕井澤 ／ 前往飯店放行李</div>
-<div class="event-card-desc">踏入這座被白樺林環抱的高原小鎮，清新的空氣令人頓覺放鬆。先至飯店寄放行李，輕裝上陣。</div>
-<span class="event-tag hotel">飯店</span>
-</div>
-</div>
-</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="輕井澤銀座通" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/karuizawa,street,japan?lock=107"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">11:00 — 12:00</div>
-<div class="event-card-title">村民食堂</div>
-<div class="event-card-desc">輕井澤知名的在地食堂，以新鮮蔬菜與高原食材製作的家庭料理深受旅客喜愛，感受當地生活滋味。</div>
-<span class="event-tag food">午餐</span>
-</div>
-</div>
-</div>
-<div class="section-divider">下午</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="石之教會" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/church,forest,japan?lock=108"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">16:00 — 17:00</div>
-<div class="event-card-title">榆樹街小鎮 ／ 高原教會 ／ 石之教會</div>
-<div class="event-card-desc">榆樹街小鎮是森林系複合商場，白樺樹下的小店令人流連；石之教會融入自然地貌，是融合建築與信仰的地標。</div>
-<span class="event-tag sight">景點</span>
-</div>
-</div>
-</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="王子 Outlet" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/outlet,shopping,japan?lock=109"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">17:30 — 19:00</div>
-<div class="event-card-title">王子大飯店 Outlet</div>
-<div class="event-card-desc">輕井澤王子購物廣場是日本規模最大的 Outlet 之一，超過 240 家品牌，購物同時享受高原涼風。</div>
-<span class="event-tag sight">購物</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- ══ DAY 3 ══ -->
+
+<!-- ═══ DAY 3 ═══ -->
 <div class="day-panel" id="day3">
-<div class="day-header">
-<div class="day-label">Day <em>03</em></div>
-<div class="day-subtitle">4月1日 ｜ 輕井澤 → 東京 ｜ 瀑布・老街・教會・雲場池</div>
+  <div class="day-header">
+    <div class="day-label">Day <em>03</em></div>
+    <div class="day-subtitle">4月1日（三） ｜ 輕井澤 → 東京淺草 ｜ 瀑布・老街・教會・雲場池</div>
+  </div>
+  <div class="weather-bar" style="background:linear-gradient(135deg,#3a1a2e,#6e2f52);">
+    <div class="weather-icon">🌥</div>
+    <div class="weather-main"><div class="weather-temp">11°C</div><div class="weather-desc">輕井澤→東京・多雲　4月1日</div></div>
+    <div class="weather-details">
+      <div class="weather-detail"><span>最高</span><strong>17°C</strong></div>
+      <div class="weather-detail"><span>最低</span><strong>6°C</strong></div>
+      <div class="weather-detail"><span>降雨</span><strong>15%</strong></div>
+      <div class="weather-detail"><span>風速</span><strong>4 m/s</strong></div>
+      <div class="weather-detail"><span>濕度</span><strong>60%</strong></div>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/shiraito_falls.jpg" alt="白絲瀑布" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">09:00 — 10:30</div>
+          <div class="event-card-title">白絲瀑布</div>
+          <div class="event-card-desc">清澈地下水從弧形岩壁湧出，形成如白絲般的天然瀑布，是輕井澤最清幽的自然景觀，空氣中充滿負離子。</div>
+          <div class="tag-row"><span class="event-tag sight">自然</span><a class="map-link" href="https://maps.google.com/?q=白糸の滝+軽井沢" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>白絲瀑布</a></div>
+          <div class="transport-row" style="margin-top:.8rem;"><span class="transport-icon">🚌</span><div class="transport-body"><strong>巴士</strong>：輕井澤站北口 → 白糸の滝（約 25 分 ¥1,000）<div class="transport-tip">廣域周遊券不含此巴士；或包計程車來回（約 ¥4,000）</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/karu_oldstreet.jpg" alt="舊輕井澤銀座通" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">10:30 — 12:00</div>
+          <div class="event-card-title">舊輕井澤銀座通</div>
+          <div class="event-card-desc">充滿懷舊氣息的老街，林蔭石板路兩旁有各式手工藝品店、咖啡廳與甜點店，感受輕井澤舊時風情。</div>
+          <div class="tag-row"><span class="event-tag sight">老街</span><a class="map-link" href="https://maps.google.com/?q=旧軽井沢銀座通り" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>舊輕銀座通</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/soba2.jpg" alt="午餐" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">12:00 — 13:30</div>
+          <div class="event-card-title">午餐</div>
+          <div class="event-card-desc">在舊輕銀座通附近享用告別輕井澤的最後一餐。</div>
+          <div class="tag-row"><span class="event-tag food">午餐</span></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍜 推薦午餐名單 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>川上庵 本店</td><td><span class="ft ft-soba">蕎麥麵</span></td><td>石臼手打蕎麥，舊輕必吃</td></tr>
+            <tr><td>腸詰屋</td><td><span class="ft ft-set">香腸</span></td><td>自製香腸現烤，邊走邊吃</td></tr>
+            <tr><td>軽井沢ブルワリー</td><td><span class="ft ft-set">精釀啤酒</span></td><td>在地精釀搭輕食</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-divider">午後</div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/kumoba_pond.jpg" alt="雲場池" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">14:00 — 16:00</div>
+          <div class="event-card-title">輕井澤聖保羅教會 ／ 雲場池</div>
+          <div class="event-card-desc">聖保羅教會為英式木構造（日本重要文化財）；雲場池靜謐如鏡，春日嫩綠倒映湖面，格外迷人。</div>
+          <div class="tag-row"><span class="event-tag sight">景點</span><a class="map-link" href="https://maps.google.com/?q=軽井沢聖パウロカトリック教会" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>聖保羅教會</a><a class="map-link" href="https://maps.google.com/?q=雲場池+軽井沢" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>雲場池</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="event transit">
+      <div class="event-time">16:56 – 18:06</div>
+      <div class="transport-row"><span class="transport-icon">🚅</span><div class="transport-body"><strong>北陸新幹線</strong>　KARUIZAWA（16:56）→ UENO（18:06）｜ 70 分（廣域周遊券使用）<div class="transport-tip">16:30 前到月台；站內可買輕井澤便當；抵上野後換地鐵銀座線至淺草站（約 20 分）</div></div></div>
+    </div>
+    <div class="event">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/hotel_asakusa.jpg" alt="OTHER SPACE Asakusa" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">18:30 — 20:00</div>
+          <div class="event-card-title">Check-in ｜ OTHER SPACE Asakusa ／ 晚餐</div>
+          <div class="event-card-desc">辦理入住後，就近在淺草周邊享用晚餐。淺草是東京最具江戶風情的地區。</div>
+          <div class="tag-row"><span class="event-tag hotel">入住</span><span class="event-tag food">晚餐</span><a class="map-link" href="https://maps.google.com/?q=OTHER+SPACE+Asakusa" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>OTHER SPACE</a></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍽 淺草晚餐推薦 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>駒形どぜう</td><td><span class="ft ft-set">泥鰍鍋</span></td><td>淺草名物，江戶時代傳承老舖</td></tr>
+            <tr><td>浅草今半</td><td><span class="ft ft-teppan">壽喜燒</span></td><td>黑毛和牛壽喜燒，頂級享受</td></tr>
+            <tr><td>大黒屋天麩羅</td><td><span class="ft ft-set">天婦羅</span></td><td>百年天婦羅蕎麥老舖</td></tr>
+            <tr><td>神谷バー</td><td><span class="ft ft-izakaya">居酒屋</span></td><td>明治開業，「電気ブラン」名酒</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="timeline">
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="白絲瀑布" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/waterfall,forest,japan?lock=110"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">09:00 — 10:30</div>
-<div class="event-card-title">白絲瀑布</div>
-<div class="event-card-desc">清澈地下水從弧形岩壁湧出，形成如白絲般細緻的天然瀑布，是輕井澤最清幽的自然景觀，空氣中充滿負離子。</div>
-<span class="event-tag sight">自然</span>
-</div>
-</div>
-</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="舊輕井澤銀座通" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/karuizawa,old,street,japan?lock=111"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">10:30 — 12:00</div>
-<div class="event-card-title">舊輕井澤銀座通</div>
-<div class="event-card-desc">充滿懷舊氣息的老街，林蔭石板路兩旁有各式手工藝品店、咖啡廳與甜點店，感受輕井澤舊時風情。</div>
-<span class="event-tag sight">老街</span>
-</div>
-</div>
-</div>
-<div class="event">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="蕎麥麵" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/soba,japanese,food?lock=112"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">12:00 — 13:30</div>
-<div class="event-card-title">午餐</div>
-<div class="event-card-desc">在舊輕銀座通附近享用午餐，嚐嚐輕井澤特色的手打蕎麥麵或義式料理，補充一下午的能量。</div>
-<span class="event-tag food">午餐</span>
-</div>
-</div>
-</div>
-<div class="section-divider">午後</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="雲場池" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/pond,forest,japan?lock=113"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">14:00 — 16:00</div>
-<div class="event-card-title">輕井澤聖保羅教會 ／ 雲場池</div>
-<div class="event-card-desc">聖保羅教會為英式木構造建築，是日本重要文化財；雲場池靜謐如鏡，倒映四季美景，春日嫩綠格外迷人。</div>
-<span class="event-tag sight">景點</span>
-</div>
-</div>
-</div>
-<div class="event transit">
-<div class="event-time">16:56 – 18:06</div>
-<div class="transport-row">
-<span class="transport-icon">🚅</span>
-<span class="transport-text"><strong>新幹線返回東京</strong>　輕井澤 → 東京　｜ 約 1h10m</span>
-</div>
-</div>
-<div class="event transit">
-<div class="event-time">18:00 – 20:00</div>
-<div class="event-title">回飯店放行李 ＋ 晚餐</div>
-</div>
-</div>
-</div>
-<!-- ══ DAY 4 ══ -->
+
+<!-- ═══ DAY 4 ═══ -->
 <div class="day-panel" id="day4">
-<div class="day-header">
-<div class="day-label">Day <em>04</em></div>
-<div class="day-subtitle">4月2日 ｜ 東京市區 ｜ 中目黑賞櫻 · 自由之丘漫步</div>
+  <div class="day-header">
+    <div class="day-label">Day <em>04</em></div>
+    <div class="day-subtitle">4月2日（四） ｜ 東京市區 ｜ 中目黑賞櫻 · 自由之丘漫步</div>
+  </div>
+  <div class="weather-bar" style="background:linear-gradient(135deg,#6b1a3a,#b03060);">
+    <div class="weather-icon">🌸</div>
+    <div class="weather-main"><div class="weather-temp">17°C</div><div class="weather-desc">東京・晴 ＋ 滿開櫻花　4月2日</div></div>
+    <div class="weather-details">
+      <div class="weather-detail"><span>最高</span><strong>20°C</strong></div>
+      <div class="weather-detail"><span>最低</span><strong>11°C</strong></div>
+      <div class="weather-detail"><span>降雨</span><strong>5%</strong></div>
+      <div class="weather-detail"><span>風速</span><strong>3 m/s</strong></div>
+      <div class="weather-detail"><span>濕度</span><strong>50%</strong></div>
+    </div>
+  </div>
+  
+  <div class="hotel-banner">
+    <div class="hotel-banner-body">
+      <div class="hotel-banner-label">🏨 今晚住宿（3/30–3/31）</div>
+      <div class="hotel-banner-name">APA Hotel 上野站北</div>
+      <div class="hotel-banner-sub">距上野站步行 1 分鐘 ｜ 上野公園・阿美橫丁近在咫尺</div>
+    </div>
+    <a class="map-link" href="https://maps.google.com/?q=APA+Hotel+Ueno-Ekikita" target="_blank" style="flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+  </div>
+  <div class="timeline">
+    <div class="event transit">
+      <div class="event-time">08:30 – 09:00</div>
+      <div class="transport-row"><span class="transport-icon">🚇</span><div class="transport-body"><strong>地鐵</strong>：浅草駅 → 中目黒駅（東京地鐵日比谷線 直達 約 35 分 ¥220）<div class="transport-tip">日比谷線可直達中目黑，無需換車；請用 Suica</div></div></div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/nakameguro.jpg" alt="中目黑賞櫻" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">09:00 — 12:00</div>
+          <div class="event-card-title">中目黑賞櫻</div>
+          <div class="event-card-desc">目黑川兩岸染井吉野盛開，粉色花瓣飄落水面如夢似幻。Starbucks Reserve 中目黑、各式設計感咖啡廳沿川排列。</div>
+          <div class="tag-row"><span class="event-tag sight">賞櫻</span><a class="map-link" href="https://maps.google.com/?q=中目黒+目黒川+桜" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>中目黑目黑川</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/ramen.jpg" alt="午餐" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">12:00 — 13:30</div>
+          <div class="event-card-title">午餐 ｜ 中目黑周邊</div>
+          <div class="event-card-desc">在中目黑周邊享用午餐。</div>
+          <div class="tag-row"><span class="event-tag food">午餐</span></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍜 中目黑午餐推薦 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>蔦（つた）</td><td><span class="ft ft-ramen">醬油拉麵</span></td><td>米其林一星</td></tr>
+            <tr><td>Yakiniku Jumbo</td><td><span class="ft ft-bbq">黑毛和牛</span></td><td>午間套餐超值</td></tr>
+            <tr><td>魚屋路 中目黒店</td><td><span class="ft ft-sushi">迴轉壽司</span></td><td>新鮮海產，CP值高</td></tr>
+            <tr><td>中目黑高架橋下</td><td><span class="ft ft-set">多元選擇</span></td><td>高架橋下美食街</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-divider">下午</div>
+    <div class="event transit">
+      <div class="event-time">13:30 – 13:45</div>
+      <div class="transport-row"><span class="transport-icon">🚇</span><div class="transport-body"><strong>地鐵</strong>：中目黒駅 → 自由が丘駅（東急東橫線 10 分 ¥160）<div class="transport-tip">熊野神社在自由が丘站南口步行 5 分</div></div></div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/jiyugaoka.jpg" alt="自由之丘" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">13:30 — 18:00</div>
+          <div class="event-card-title">熊野神社 ／ 自由之丘周邊</div>
+          <div class="event-card-desc">自由之丘以法式甜點、雜貨小店聞名，石板小巷優雅迷人；熊野神社是當地的精神地標。</div>
+          <div class="tag-row"><span class="event-tag sight">散策</span><a class="map-link" href="https://maps.google.com/?q=熊野神社+自由が丘" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>熊野神社</a><a class="map-link" href="https://maps.google.com/?q=自由が丘+東京" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>自由之丘</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/la_vita.jpg" alt="LA VITA" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">18:00 — 20:00</div>
+          <div class="event-card-title">自由之丘晚餐 ＋ LA VITA</div>
+          <div class="event-card-desc">LA VITA 是自由之丘最具代表性的威尼斯風情廣場，夜燈倒映水面如置身歐洲，搭配附近義式料理完美收尾。</div>
+          <div class="tag-row"><span class="event-tag food">晚餐</span><a class="map-link" href="https://maps.google.com/?q=LA+VITA+自由が丘" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>LA VITA</a></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍽 自由之丘晚餐推薦 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>トラットリア・ダ・フィリッポ</td><td><span class="ft ft-set">義大利料理</span></td><td>LA VITA 旁，正統義式</td></tr>
+            <tr><td>Mont St. Clair</td><td><span class="ft ft-set">法式甜點</span></td><td>辻口博啟名店，晚間輕食</td></tr>
+            <tr><td>鳥良 自由が丘店</td><td><span class="ft ft-yakitori">雞肉串燒</span></td><td>備長炭串燒居酒屋</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="timeline">
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="中目黑賞櫻" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/cherry,blossom,river,tokyo?lock=114"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">09:00 — 12:00</div>
-<div class="event-card-title">中目黑賞櫻</div>
-<div class="event-card-desc">目黑川兩岸染井吉野盛開，粉色花瓣飄落水面如夢似幻。沿途設計感咖啡廳林立，是東京最時髦的賞櫻場所。</div>
-<span class="event-tag sight">賞櫻</span>
-</div>
-</div>
-</div>
-<div class="event">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="午餐" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/japanese,lunch,food?lock=115"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">12:00 — 13:30</div>
-<div class="event-card-title">午餐</div>
-<div class="event-card-desc">在中目黑周邊的餐廳享用午餐，推薦街邊的壽司吧台、道地拉麵或時髦的洋食餐廳。</div>
-<span class="event-tag food">午餐</span>
-</div>
-</div>
-</div>
-<div class="section-divider">下午</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="自由之丘" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/tokyo,shopping,street,japan?lock=116"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">13:30 — 18:00</div>
-<div class="event-card-title">熊野神社 ／ 自由之丘周邊</div>
-<div class="event-card-desc">自由之丘以法式甜點、雜貨小店聞名，石板小巷優雅迷人；熊野神社是當地的精神地標，適合靜心參拜。</div>
-<span class="event-tag sight">散策</span>
-</div>
-</div>
-</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="LA VITA 自由之丘" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/canal,shopping,night?lock=117"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">18:00 — 20:00</div>
-<div class="event-card-title">自由之丘晚餐 ＋ LA VITA</div>
-<div class="event-card-desc">LA VITA 是自由之丘最具代表性的威尼斯風情廣場，夜燈倒映水面如置身歐洲，搭配義式料理完美收尾。</div>
-<span class="event-tag food">晚餐</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- ══ DAY 5 ══ -->
+
+<!-- ═══ DAY 5 ═══ -->
 <div class="day-panel" id="day5">
-<div class="day-header">
-<div class="day-label">Day <em>05</em></div>
-<div class="day-subtitle">4月3日 ｜ 鎌倉・江之島 ｜ 古都神社與海岸夕陽</div>
+  <div class="day-header">
+    <div class="day-label">Day <em>05</em></div>
+    <div class="day-subtitle">4月3日（五） ｜ 鎌倉・江之島 ｜ 古都神社與海岸夕陽</div>
+  </div>
+  <div class="weather-bar" style="background:linear-gradient(135deg,#1a3a5c,#1a6b8a);">
+    <div class="weather-icon">☀️</div>
+    <div class="weather-main"><div class="weather-temp">18°C</div><div class="weather-desc">神奈川・晴　4月3日</div></div>
+    <div class="weather-details">
+      <div class="weather-detail"><span>最高</span><strong>21°C</strong></div>
+      <div class="weather-detail"><span>最低</span><strong>12°C</strong></div>
+      <div class="weather-detail"><span>降雨</span><strong>5%</strong></div>
+      <div class="weather-detail"><span>風速</span><strong>5 m/s</strong></div>
+      <div class="weather-detail"><span>濕度</span><strong>55%</strong></div>
+    </div>
+  </div>
+  
+  <div class="hotel-banner">
+    <div class="hotel-banner-body">
+      <div class="hotel-banner-label">🏨 今晚住宿（3/31–4/1）</div>
+      <div class="hotel-banner-name">輕井澤王子大飯店西館</div>
+      <div class="hotel-banner-sub">距輕井澤站步行 5 分鐘 ｜ 緊鄰王子 Outlet ｜ 森林溫泉設施</div>
+    </div>
+    <a class="map-link" href="https://maps.google.com/?q=軽井沢プリンスホテル" target="_blank" style="flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+  </div>
+  <div class="timeline">
+    <div class="event transit">
+      <div class="event-time">07:30 – 09:00</div>
+      <div class="transport-row"><span class="transport-icon">🚃</span><div class="transport-body"><strong>前往鎌倉</strong>：浅草駅 → 品川駅（都営浅草線 約 30 分 ¥310）→ 鎌倉駅（JR 横須賀線 約 55 分 ¥920）<div class="transport-tip">推薦買「鎌倉・江ノ島パス」¥1,640 無限搭江之電＋小田急</div></div></div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/kamakura_buddha.jpg" alt="鎌倉大佛" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">09:00 — 12:00</div>
+          <div class="event-card-title">鶴岡八幡宮 ／ 長谷寺 ／ 鎌倉大佛</div>
+          <div class="event-card-desc">鶴岡八幡宮是鎌倉的精神核心；長谷寺有壯觀的十一面觀音；鎌倉大佛高達 11.4 公尺，氣勢磅礴。</div>
+          <div class="tag-row"><span class="event-tag sight">古蹟</span><a class="map-link" href="https://maps.google.com/?q=鶴岡八幡宮" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>鶴岡八幡宮</a><a class="map-link" href="https://maps.google.com/?q=長谷寺+鎌倉" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>長谷寺</a><a class="map-link" href="https://maps.google.com/?q=鎌倉大仏+高徳院" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>鎌倉大佛</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/kamakura_komachi.jpg" alt="鎌倉小町通" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">12:00 — 13:30</div>
+          <div class="event-card-title">午餐 ｜ 鎌倉小町通</div>
+          <div class="event-card-desc">在鎌倉小町通或若宮大路附近享用午餐。</div>
+          <div class="tag-row"><span class="event-tag food">午餐</span><a class="map-link" href="https://maps.google.com/?q=鎌倉小町通り" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>鎌倉小町通</a></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍜 鎌倉午餐推薦 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>いとこ 鎌倉本店</td><td><span class="ft ft-seafood">海膽親子丼</span></td><td>名物丼飯，小町通步行 3 分</td></tr>
+            <tr><td>篤姫 鎌倉本店</td><td><span class="ft ft-soba">蕎麥麵</span></td><td>若宮大路旁，石臼手打</td></tr>
+            <tr><td>鎌倉パスタ</td><td><span class="ft ft-set">和風義大利麵</span></td><td>平價好吃</td></tr>
+            <tr><td>豊島屋 本店</td><td><span class="ft ft-set">咖啡輕食</span></td><td>鴿子餅乾老舖，附設咖啡廳</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-divider">下午</div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/slam_dunk.jpg" alt="灌籃高手平交道" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">13:30 — 15:30</div>
+          <div class="event-card-title">鎌倉高校前 ｜ 灌籃高手平交道</div>
+          <div class="event-card-desc">《灌籃高手》開場曲知名場景——電車穿越平交道、相模灣為背景。動漫迷必朝聖，請勿站上鐵軌拍照。</div>
+          <div class="tag-row"><span class="event-tag sight">打卡</span><a class="map-link" href="https://maps.google.com/?q=鎌倉高校前駅+踏切" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>鎌倉高校前平交道</a></div>
+          <div class="transport-row" style="margin-top:.8rem;"><span class="transport-icon">🚋</span><div class="transport-body"><strong>江之電</strong>：鎌倉駅 → 鎌倉高校前駅（約 22 分）<div class="transport-tip">電車約 12 分一班</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/enoshima.jpg" alt="江之島" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">15:30 — 19:00</div>
+          <div class="event-card-title">江之島夕陽下午茶 ＋ 晚餐</div>
+          <div class="event-card-desc">江之島懸浮於相模灣，展望台可眺望富士山與壯麗夕陽。享用現烤海鮮料理作為完美收尾。</div>
+          <div class="tag-row"><span class="event-tag sight">夕陽</span><span class="event-tag food">晚餐</span><a class="map-link" href="https://maps.google.com/?q=江の島+神奈川県" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>江之島</a></div>
+          <div class="meal-toggle" onclick="toggleMeal(this)">🍽 江之島晚餐推薦 ▾</div>
+          <div class="meal-panel"><table class="meal-table">
+            <tr><th>店名</th><th>類型</th><th>特色</th></tr>
+            <tr><td>とびっちょ 本店</td><td><span class="ft ft-seafood">生海膽丼</span></td><td>江之島最知名，甜蝦・海膽頂配</td></tr>
+            <tr><td>魚見亭</td><td><span class="ft ft-seafood">海鮮定食</span></td><td>岩屋洞窟旁，絕景海景座位</td></tr>
+            <tr><td>貝作 えのしまビール</td><td><span class="ft ft-seafood">烤海鮮</span></td><td>在地啤酒，露天席位賞夕陽</td></tr>
+          </table></div>
+          <div class="transport-row" style="margin-top:.8rem;"><span class="transport-icon">🚃</span><div class="transport-body"><strong>返回淺草</strong>：江ノ島駅 → 藤沢駅（江之電 8 分）→ 品川駅（JR 35 分）→ 浅草駅（都営浅草線）約 90 分<div class="transport-tip">或小田急：片瀬江ノ島駅 → 新宿（60 分）→ 換地鐵至淺草</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="timeline">
 
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="鎌倉大佛" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/kamakura,buddha,japan?lock=119"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">09:00 — 12:00</div>
-<div class="event-card-title">鶴岡八幡宮 ／ 長谷寺 ／ 鎌倉大佛</div>
-<div class="event-card-desc">鶴岡八幡宮是鎌倉的精神核心；長谷寺有壯觀的十一面觀音；鎌倉大佛高達 11.4 公尺，氣勢磅礴，為日本重要文化財。</div>
-<span class="event-tag sight">古蹟</span>
-</div>
-</div>
-</div>
-<div class="event">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="鎌倉小町通" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/kamakura,street,japan?lock=120"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">12:00 — 13:30</div>
-<div class="event-card-title">午餐</div>
-<div class="event-card-desc">在鎌倉小町通享用午餐，推薦鎌倉蕎麥麵或現烤紅豆餅，邊吃邊欣賞古都街景，感受悠閒節奏。</div>
-<span class="event-tag food">午餐</span>
-</div>
-</div>
-</div>
-<div class="section-divider">下午</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="鎌倉高校前平交道" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/enoden,railway,sea,japan?lock=121"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">13:30 — 15:30</div>
-<div class="event-card-title">鎌倉高校前 ｜ 灌籃高手平交道</div>
-<div class="event-card-desc">《灌籃高手》開場曲的知名場景——電車穿越平交道、相模灣為背景。動漫迷必朝聖的地點，現實景色同樣震撼人心。</div>
-<span class="event-tag sight">打卡</span>
-</div>
-</div>
-</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="江之島" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/enoshima,island,sunset,japan?lock=122"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">15:30 — 19:00</div>
-<div class="event-card-title">江之島夕陽下午茶 ＋ 晚餐</div>
-<div class="event-card-desc">江之島懸浮於相模灣，展望台可眺望富士山與壯麗夕陽。享用現烤海鮮料理作為完美收尾，滿足視覺與味蕾。</div>
-<span class="event-tag sight">夕陽</span>
-</div>
-</div>
-</div>
-<div class="event transit">
-<div class="event-time">19:00 – 21:00</div>
-<div class="transport-row">
-<span class="transport-icon">🚃</span>
-<span class="transport-text"><strong>返回飯店</strong>　江之島 → 東京　｜ 搭乘江之電 + 東急線</span>
-</div>
-</div>
-</div>
-</div>
-<!-- ══ DAY 6 ══ -->
+<!-- ═══ DAY 6 ═══ -->
 <div class="day-panel" id="day6">
-<div class="day-header">
-<div class="day-label">Day <em>06</em></div>
-<div class="day-subtitle">4月4日 ｜ 淺草・東京 → 桃園 ｜ 最後巡禮與返程</div>
-</div>
-<div class="timeline"><div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="淺草寺" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/temple,asakusa,tokyo?lock=118"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">08:00 — 10:00</div>
-<div class="event-card-title">淺草寺</div>
-<div class="event-card-desc">東京最古老的寺廟，雷門大燈籠是日本最具代表性的地標。清晨前往人潮較少，靜靜感受古都禪意與香火繚繞。</div>
-<span class="event-tag sight">寺廟</span>
-</div>
-</div>
-</div>
-<div class="event transit">
-<div class="event-time">11:00 – 12:25</div>
-<div class="transport-row">
-<span class="transport-icon">🚅</span>
-<span class="transport-text"><strong>前往機場</strong>　飯店 → 成田機場 T1</span>
-</div>
-</div>
-<div class="event transit">
-<div class="event-time">12:25 – 14:25</div>
-<div class="transport-row">
-<span class="transport-icon">🛂</span>
-<span class="transport-text"><strong>機場等待・辦理登機</strong>　成田機場 T1　｜ 免稅店最後採購伴手禮</span>
-</div>
-</div>
-<div class="event highlight">
-<div class="event-card">
-<div class="event-card-img-wrap">
-<img alt="成田機場返程" class="event-card-img" decoding="async" loading="lazy" onerror="tripImageFallback(this)" referrerpolicy="no-referrer" src="https://loremflickr.com/1200/800/airport,departure,japan?lock=123"/>
-</div>
-<div class="event-card-body">
-<div class="event-card-time">14:25 — 17:05</div>
-<div class="event-card-title">返程飛行 ✈️</div>
-<div class="event-card-desc">搭乘班機從成田機場 T1 飛返桃園機場 T2，帶著滿滿的回憶與戰利品，依依不捨告別東京，期待下次再相逢！</div>
-<span class="event-tag tr">回家</span>
-</div>
-</div>
-</div>
-<div class="section-divider">旅程結束</div>
-<div style="text-align:center; padding: 3rem 0; color: var(--muted); font-family: 'Shippori Mincho', serif;">
-<div style="font-size: 3rem; margin-bottom: 1rem;">🌸</div>
-<div style="font-size: 1.1rem; letter-spacing: 0.15em;">また来ます ── 我們下次再來</div>
-<div style="margin-top: 0.5rem; font-size: 0.85rem; font-family: 'Karla', sans-serif; letter-spacing: 0.1em; color: var(--border);">TOKYO · KARUIZAWA · KAMAKURA · ENOSHIMA</div>
-</div>
-</div>
-</div>
-<footer>
-<strong>東京旅遊計畫 2026</strong> ｜ 3/30 – 4/4 ｜ 精心規劃・美好旅程
-</footer>
+  <div class="day-header">
+    <div class="day-label">Day <em>06</em></div>
+    <div class="day-subtitle">4月4日（六） ｜ 淺草・成田機場 ｜ 最後晨遊，旅程畫下句點</div>
+  </div>
+  <div class="weather-bar" style="background:linear-gradient(135deg,#2a1a0a,#5a3a1a);">
+    <div class="weather-icon">🌤</div>
+    <div class="weather-main"><div class="weather-temp">15°C</div><div class="weather-desc">東京・晴時多雲　4月4日</div></div>
+    <div class="weather-details">
+      <div class="weather-detail"><span>最高</span><strong>18°C</strong></div>
+      <div class="weather-detail"><span>最低</span><strong>10°C</strong></div>
+      <div class="weather-detail"><span>降雨</span><strong>10%</strong></div>
+      <div class="weather-detail"><span>風速</span><strong>4 m/s</strong></div>
+      <div class="weather-detail"><span>濕度</span><strong>58%</strong></div>
+    </div>
+  </div>
+  
+  <div class="hotel-banner">
+    <div class="hotel-banner-body">
+      <div class="hotel-banner-label">🏨 今晚起住宿（4/1–4/4）</div>
+      <div class="hotel-banner-name">OTHER SPACE Asakusa</div>
+      <div class="hotel-banner-sub">淺草文化街區精品住宿 ｜ 鄰近淺草寺・合羽橋・東京晴空塔</div>
+    </div>
+    <a class="map-link" href="https://maps.google.com/?q=OTHER+SPACE+Asakusa" target="_blank" style="flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+  </div>
+  <div class="timeline">
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/sensoji.jpg" alt="淺草寺" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">08:00 — 10:00</div>
+          <div class="event-card-title">淺草寺・仲見世通</div>
+          <div class="event-card-desc">東京最古老的寺廟，雷門大燈籠是日本最具代表性的地標。清晨人潮最少，靜靜感受古都禪意。仲見世通掃貨最後伴手禮！</div>
+          <div class="tag-row"><span class="event-tag sight">寺廟</span><a class="map-link" href="https://maps.google.com/?q=浅草寺+東京" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>淺草寺</a><a class="map-link" href="https://maps.google.com/?q=仲見世通+浅草" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>仲見世通</a></div>
+          <div class="transport-row" style="margin-top:.8rem;"><span class="transport-icon">🚶</span><div class="transport-body"><strong>步行</strong>：OTHER SPACE → 淺草寺 約 5–8 分鐘<div class="transport-tip">仲見世 09:00 開門；推薦：人形燒・雷おこし・扇子</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="event transit">
+      <div class="event-time">10:00 – 11:00</div>
+      <div class="transport-row"><span class="transport-icon">🏨</span><div class="transport-body"><strong>回飯店退房・整理行李</strong><div class="transport-tip">建議 10:30 前出發前往機場</div></div></div>
+    </div>
+    <div class="event transit">
+      <div class="event-time">11:00 – 12:25</div>
+      <div class="transport-row"><span class="transport-icon">🚅</span><div class="transport-body"><strong>前往成田機場 T1</strong>：浅草駅 → 上野駅（銀座線 5 分）→ N'EX → 成田機場 T1（廣域周遊券使用 約 65 分）<div class="transport-tip">或京成スカイライナー（押上駅出發 約 45 分 ¥2,570）</div></div></div>
+    </div>
+    <div class="event transit">
+      <div class="event-time">12:25 – 14:25</div>
+      <div class="transport-row"><span class="transport-icon">🛂</span><div class="transport-body"><strong>機場等待・辦理登機</strong>　成田機場 T1<div class="transport-tip">T1 免稅區：吉兆和菓子・資生堂・日本威士忌，最後採購機會</div></div></div>
+    </div>
+    <div class="event highlight">
+      <div class="event-card">
+        <div class="event-card-img-wrap"><img class="event-card-img" src="images/narita_airport.jpg" alt="返程" loading="lazy"></div>
+        <div class="event-card-body">
+          <div class="event-card-time">14:25 — 17:05</div>
+          <div class="event-card-title">返程飛行 ✈️</div>
+          <div class="event-card-desc">搭乘班機從成田機場 T1 飛返桃園機場 T2，帶著滿滿的回憶與戰利品，依依不捨道別東京，期待下次再相逢！</div>
+          <div class="tag-row"><span class="event-tag tr">回家</span><a class="map-link" href="https://maps.google.com/?q=成田国際空港+第1ターミナル" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>成田機場 T1</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-divider">旅程結束</div>
+    <div style="text-align:center;padding:3rem 0;color:var(--muted);font-family:'Shippori Mincho',serif;">
+      <div style="font-size:3rem;margin-bottom:1rem;">🌸</div>
+      <div style="font-size:1.1rem;letter-spacing:.15em;">また来ます ── 我們下次再來</div>
+      <div style="margin-top:.5rem;font-size:.85rem;font-family:'Karla',sans-serif;letter-spacing:.1em;color:var(--border);">TOKYO · KARUIZAWA · KAMAKURA · ENOSHIMA</div>
+    </div>
+  </div>
+
+<footer><strong>東京旅遊計畫 2026</strong> ｜ 3/30 – 4/4 ｜ 精心規劃・美好旅程</footer>
+
 <script>
-  function tripImageFallback(img) {
-    if (img.dataset.fallbackApplied === '1') return;
-    img.dataset.fallbackApplied = '1';
-    const label = encodeURIComponent(img.alt || 'Tokyo Trip');
-    img.src = 'https://placehold.co/1200x800/f5f0e8/7a7060?text=' + label;
-  }
-
-
-  function showDay(id, btn) {
-    document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
-    window.scrollTo({ top: document.querySelector('.tabs-wrapper').offsetTop - 1, behavior: 'smooth' });
-  }
+function showDay(id,btn){
+  document.querySelectorAll('.day-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:document.querySelector('.tabs-wrapper').offsetTop-1,behavior:'smooth'});
+}
+function toggleMeal(el){
+  const panel=el.nextElementSibling;
+  const open=panel.classList.contains('open');
+  panel.classList.toggle('open',!open);
+  el.innerHTML=el.innerHTML.replace(open?'▴':'▾',open?'▾':'▴');
+}
 </script>
 </body>
 </html>
